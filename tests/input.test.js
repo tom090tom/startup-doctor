@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { symlink } from 'node:fs/promises';
+import { symlink, link } from 'node:fs/promises';
 import { join } from 'node:path';
 import { readProject } from '../src/input.js';
 import { project, put } from './helpers.js';
@@ -91,4 +91,22 @@ test('does not read actual .env files', async t => {
   assert.deepEqual(input.config.env, []);
   assert.equal(input.warnings.length, 1);
   assert.ok(!JSON.stringify(input).includes('KEEP_PRIVATE'));
+});
+
+test('rejects an env template symlink even when its target stays inside the project', async t => {
+  const root = await project(t);
+  await put(root, '.env', 'REAL_KEY=PRIVATE_VALUE');
+  try { await symlink(join(root, '.env'), join(root, '.env.example'), 'file'); }
+  catch (error) {
+    if (error.code === 'EPERM') return t.skip('Windows requires symlink privilege; hardlink rejection is verified separately.');
+    throw error;
+  }
+  await assert.rejects(readProject(root), { code: 'INPUT_INVALID' });
+});
+
+test('rejects hardlinked env templates before reading shared credential content', async t => {
+  const root = await project(t);
+  await put(root, '.env', 'REAL_KEY=PRIVATE_VALUE');
+  await link(join(root, '.env'), join(root, '.env.example'));
+  await assert.rejects(readProject(root), { code: 'INPUT_INVALID' });
 });

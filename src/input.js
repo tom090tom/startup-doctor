@@ -1,4 +1,4 @@
-import { open, realpath } from 'node:fs/promises';
+import { open, realpath, lstat } from 'node:fs/promises';
 import { isAbsolute, relative, resolve } from 'node:path';
 
 export class InputError extends Error {
@@ -21,11 +21,13 @@ export async function readTextInside(root, file, maxBytes, optional = false) {
   if (!inside(candidate)) throw new InputError('文件路径越出项目目录。');
   let handle;
   try {
+    const entry = await lstat(candidate);
+    if (!entry.isFile() || entry.isSymbolicLink() || entry.nlink > 1) throw new InputError('输入必须是普通、非链接文件。');
     const resolved = await realpath(candidate);
     if (!inside(resolved)) throw new InputError('文件链接越出项目目录；请使用项目内的普通文件。');
     handle = await open(resolved, 'r');
     const stat = await handle.stat();
-    if (!stat.isFile() || stat.size > maxBytes) throw new InputError('输入不是普通文件，或超过规定大小。');
+    if (!stat.isFile() || stat.nlink > 1 || stat.size > maxBytes) throw new InputError('输入不是单链接普通文件，或超过规定大小。');
     const buffer = Buffer.alloc(maxBytes + 1);
     let length = 0;
     while (length < buffer.length) {
