@@ -99,5 +99,5 @@ export async function readProject(directory) {
   }
   env = [...new Set(env)];
   if (env.length > 100) throw new InputError('最多检查 100 个环境变量。');
-  return { root, pkg, config: { env, ports: [...new Set(raw.ports ?? [])] }, warnings };
+  return { root, pkg, config: { env, ports: [...new Set(raw.ports ?? [])] }, portsConfigured: raw.ports !== undefined, warnings };
 }
