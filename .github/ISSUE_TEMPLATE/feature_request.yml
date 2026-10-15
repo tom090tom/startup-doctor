@@ -1,0 +1,17 @@
+name: Feature request / 需求
+description: 说明一次真实启动失败和目前怎么处理。
+title: "feat: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 什么问题，影响谁？
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 最小方案与验证方式
+      description: 说明检查范围、误报风险和维护成本，不附真实配置。
+    validations:
+      required: true

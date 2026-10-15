@@ -1,0 +1,5 @@
+{
+  "name": "healthy-startup-example",
+  "private": true,
+  "engines": { "node": ">=22" }
+}

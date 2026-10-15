@@ -1,0 +1,6 @@
+{
+  "name": "broken-startup-example",
+  "private": true,
+  "engines": { "node": "<1" },
+  "dependencies": { "startup-doctor-demo-missing": "^1.0.0" }
+}
