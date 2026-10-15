@@ -1,0 +1,23 @@
+name: Bug report / 缺陷
+description: 使用合成项目报告可复现的问题；安全问题请走私密漏洞报告。
+title: "bug: "
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: 系统、Node 与工具版本
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 最小复现
+      description: 只用合成配置，删除密钥、内部路径和业务信息；给出命令、退出码与检查 ID。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 实际与预期结果
+    validations:
+      required: true

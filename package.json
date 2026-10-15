@@ -1,0 +1,16 @@
+{
+  "name": "startup-doctor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Read-only, Windows-first diagnostics for Node.js project startup blockers.",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "bin": { "startup-doctor": "bin/startup-doctor.js" },
+  "scripts": {
+    "test": "node --test",
+    "check": "node scripts/check.js",
+    "demo": "node scripts/demo.js"
+  },
+  "dependencies": { "semver": "7.8.5" }
+}
